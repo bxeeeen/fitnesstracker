@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useUserExercises } from '../hooks/useUserExercises'
 import { useLatestLogs } from '../hooks/useLatestLogs'
 import { getGreeting } from '../lib/greetings'
+import EmptyState from '../components/EmptyState'
 
 export default function DashboardPage() {
   const { profile } = useAuth()
@@ -31,11 +32,7 @@ export default function DashboardPage() {
       {loading && <p>Lade…</p>}
       {error && <p className="form-error">{error}</p>}
 
-      {!loading && !error && userExercises.length === 0 && (
-        <p className="page-hint">
-          Du hast noch keine Geräte ausgewählt. <Link to="/geraete">Jetzt Geräte auswählen</Link>
-        </p>
-      )}
+      {!loading && !error && userExercises.length === 0 && <EmptyState />}
 
       <ul className="dashboard-list">
         {userExercises.map(({ exercise_id, exercises: exercise }) => {

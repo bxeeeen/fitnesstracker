@@ -15,16 +15,13 @@ export default function ExerciseSetupPage() {
 
       <ExerciseCatalogEditor onChange={() => setHasChanges(true)} />
 
-      <div className="confirm-bar">
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={!hasChanges}
-          onClick={() => navigate('/')}
-        >
-          Bestätigen
-        </button>
-      </div>
+      {hasChanges && (
+        <div className="confirm-bar">
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/')}>
+            Bestätigen
+          </button>
+        </div>
+      )}
     </div>
   )
 }

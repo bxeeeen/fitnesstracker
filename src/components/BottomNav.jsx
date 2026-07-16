@@ -41,7 +41,7 @@ export default function BottomNav() {
       </NavLink>
       <NavLink to="/geraete" className="bottom-nav-item">
         <DumbbellIcon />
-        <span>Geräte</span>
+        <span>Übungen</span>
       </NavLink>
       <NavLink to="/ich" className="bottom-nav-item">
         <ProfileIcon />

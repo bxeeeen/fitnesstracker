@@ -42,8 +42,8 @@ export default function ProfilePage() {
 
   return (
     <div className="page">
-      <div className="page-hero">
-        <h1>Ich</h1>
+      <div className="page-hero profile-hero">
+        <h1>{profile?.name || 'Ich'}</h1>
         <p>{user?.email}</p>
       </div>
 

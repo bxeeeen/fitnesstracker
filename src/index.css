@@ -91,7 +91,7 @@ button {
   margin: 0 auto;
   padding: 20px 16px;
   padding-bottom: calc(88px + env(safe-area-inset-bottom));
-  background: linear-gradient(225deg, var(--color-granite) 0, var(--bg) 340px);
+  background: linear-gradient(135deg, var(--color-granite) 0, var(--bg) 480px);
 }
 
 .page {
@@ -102,6 +102,62 @@ button {
 
 .page-hint {
   color: var(--text-muted);
+}
+
+/* Empty state — centered plus icon, used when the user has no exercises yet */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 50vh;
+  text-decoration: none;
+  transition: transform 160ms var(--ease-out);
+}
+
+.empty-state:active {
+  transform: scale(0.97);
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  color: var(--color-granite);
+  transition: transform 200ms var(--ease-out);
+}
+
+.empty-state-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .empty-state:hover .empty-state-icon {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state,
+  .empty-state-icon {
+    transition: none;
+  }
+
+  .empty-state:active {
+    transform: none;
+  }
 }
 
 .page-loading {
@@ -149,6 +205,15 @@ button {
   color: rgba(255, 255, 255, 0.88);
 }
 
+.profile-hero h1 {
+  font-size: 2.6rem;
+  margin-bottom: 4px;
+}
+
+.profile-hero p {
+  font-size: 0.95rem;
+}
+
 /* Greeting card — Home only: a solid, opaque gradient card (not glass), so the
    white greeting text keeps full contrast regardless of what's behind it. */
 
@@ -156,6 +221,7 @@ button {
   background: var(--accent-gradient);
   border-radius: 20px;
   padding: 24px 20px;
+  margin-bottom: 12px;
 }
 
 .greeting-card h1 {
@@ -189,6 +255,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  background: linear-gradient(135deg, var(--color-granite) 0, var(--bg) 480px);
 }
 
 .auth-form {
@@ -419,6 +486,24 @@ select {
   padding: 0 16px;
   z-index: 40;
   pointer-events: none;
+  animation: confirm-bar-in 240ms var(--ease-out);
+}
+
+@keyframes confirm-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confirm-bar {
+    animation: none;
+  }
 }
 
 .confirm-bar .btn {
