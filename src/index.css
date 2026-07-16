@@ -3,7 +3,6 @@
   --color-powder-blue: #92afd7;
   --color-blue-slate: #5a7684;
   --color-granite: #395b50;
-  --color-granite-soft: #607a71;
   --color-evergreen: #1f2f16;
 
   --bg: #faf8f3;
@@ -14,6 +13,11 @@
   --border: rgba(90, 118, 132, 0.18);
   --accent: var(--color-blue-slate);
   --accent-gradient: linear-gradient(135deg, var(--color-blue-slate), var(--color-granite));
+  /* Hero mesh — the light half of the palette only (no Evergreen), fixed px geometry so
+     the colored band stays a constant size no matter how tall the page content is. */
+  --hero-gradient: radial-gradient(240px 200px at calc(100% - 20px) 0px, var(--color-powder-blue), transparent 70%),
+    radial-gradient(260px 220px at 50% 120px, var(--color-lavender), transparent 72%),
+    linear-gradient(135deg, var(--color-blue-slate) 0, var(--color-granite) 110px, var(--bg) 300px);
   --tint-bg: rgba(197, 209, 235, 0.35);
   --danger: #b3433a;
   --danger-bg: #f8e9e7;
@@ -92,7 +96,7 @@ button {
   margin: 0 auto;
   padding: 20px 16px;
   padding-bottom: calc(88px + env(safe-area-inset-bottom));
-  background: linear-gradient(135deg, var(--color-granite-soft) 0, var(--bg) 240px);
+  background: var(--hero-gradient);
 }
 
 .page {
@@ -260,7 +264,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: linear-gradient(135deg, var(--color-granite) 0, var(--bg) 480px);
+  background: var(--hero-gradient);
 }
 
 .auth-form {

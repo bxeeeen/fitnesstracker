@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useUserExercises } from '../hooks/useUserExercises'
 import ExerciseCatalogEditor from '../components/ExerciseCatalogEditor'
 
 export default function OnboardingPage() {
@@ -11,6 +12,8 @@ export default function OnboardingPage() {
   const [heightCm, setHeightCm] = useState('')
   const [weightKg, setWeightKg] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const { userExercises, refetch: refetchUserExercises } = useUserExercises()
+  const hasSelection = userExercises.length > 0
 
   if (profileLoading) {
     return <div className="page-loading">Lade…</div>
@@ -51,7 +54,7 @@ export default function OnboardingPage() {
         <div className="page onboarding-step">
           <h1>Willkommen!</h1>
           <p className="page-hint">Wähle die Geräte aus, an denen du trainierst. Du kannst das später jederzeit ändern.</p>
-          <ExerciseCatalogEditor />
+          <ExerciseCatalogEditor onChange={refetchUserExercises} />
         </div>
       )}
 
@@ -87,7 +90,7 @@ export default function OnboardingPage() {
         </form>
       )}
 
-      {step === 'exercises' && (
+      {step === 'exercises' && hasSelection && (
         <div className="confirm-bar">
           <button type="button" className="btn btn-primary" onClick={() => setStep('info')}>
             Weiter
