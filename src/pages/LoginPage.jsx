@@ -53,7 +53,7 @@ export default function LoginPage() {
           />
         </label>
         {error && <p className="form-error">{error}</p>}
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           {submitting ? 'Anmelden…' : 'Anmelden'}
         </button>
         <p className="auth-switch">

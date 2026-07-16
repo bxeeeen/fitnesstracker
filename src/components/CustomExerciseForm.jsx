@@ -57,7 +57,7 @@ export default function CustomExerciseForm({ onCreated }) {
   }
 
   return (
-    <form className="custom-exercise-form" onSubmit={handleSubmit}>
+    <form className="card custom-exercise-form" onSubmit={handleSubmit}>
       <h3>Eigene Übung hinzufügen</h3>
       <div className="custom-exercise-fields">
         <input
@@ -74,7 +74,7 @@ export default function CustomExerciseForm({ onCreated }) {
             </option>
           ))}
         </select>
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           {submitting ? 'Hinzufügen…' : 'Hinzufügen'}
         </button>
       </div>

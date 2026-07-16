@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 export default function RegisterPage() {
   const { session } = useAuth()
   const navigate = useNavigate()
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -25,7 +26,11 @@ export default function RegisterPage() {
     }
 
     setSubmitting(true)
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name: name.trim() } },
+    })
     setSubmitting(false)
 
     if (error) {
@@ -44,6 +49,16 @@ export default function RegisterPage() {
     <div className="auth-page">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h1>Registrieren</h1>
+        <label>
+          Name
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="name"
+          />
+        </label>
         <label>
           E-Mail
           <input
@@ -66,7 +81,7 @@ export default function RegisterPage() {
           />
         </label>
         {error && <p className="form-error">{error}</p>}
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           {submitting ? 'Registrieren…' : 'Registrieren'}
         </button>
         <p className="auth-switch">

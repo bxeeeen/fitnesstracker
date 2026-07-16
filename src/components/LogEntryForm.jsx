@@ -1,34 +1,61 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function today() {
   return new Date().toISOString().slice(0, 10)
 }
 
-export default function LogEntryForm({ onSubmit }) {
+function SliderField({ label, value, onChange, min, max, step, unit }) {
+  return (
+    <label className="slider-field">
+      <span className="slider-field-header">
+        <span>{label}</span>
+        <span className="slider-field-value">
+          {value}
+          {unit}
+        </span>
+      </span>
+      <input
+        type="range"
+        className="slider"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
+    </label>
+  )
+}
+
+export default function LogEntryForm({ onSubmit, lastLog }) {
   const [loggedDate, setLoggedDate] = useState(today())
-  const [weightKg, setWeightKg] = useState('')
-  const [reps, setReps] = useState('')
-  const [sets, setSets] = useState('')
+  const [weightKg, setWeightKg] = useState(lastLog?.weight_kg ?? 20)
+  const [reps, setReps] = useState(lastLog?.reps ?? 8)
+  const [sets, setSets] = useState(lastLog?.sets ?? 3)
   const [notes, setNotes] = useState('')
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+  const appliedLastLog = useRef(false)
+
+  useEffect(() => {
+    if (lastLog && !appliedLastLog.current) {
+      appliedLastLog.current = true
+      setWeightKg(lastLog.weight_kg)
+      if (lastLog.reps != null) setReps(lastLog.reps)
+      if (lastLog.sets != null) setSets(lastLog.sets)
+    }
+  }, [lastLog])
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError(null)
-
-    const weight = parseFloat(weightKg)
-    if (!weight || weight <= 0) {
-      setError('Bitte ein gültiges Gewicht angeben.')
-      return
-    }
-
     setSubmitting(true)
+
     const { error } = await onSubmit({
       loggedDate,
-      weightKg: weight,
-      reps: reps ? parseInt(reps, 10) : null,
-      sets: sets ? parseInt(sets, 10) : null,
+      weightKg,
+      reps,
+      sets,
       notes,
     })
     setSubmitting(false)
@@ -38,14 +65,11 @@ export default function LogEntryForm({ onSubmit }) {
       return
     }
 
-    setWeightKg('')
-    setReps('')
-    setSets('')
     setNotes('')
   }
 
   return (
-    <form className="log-entry-form" onSubmit={handleSubmit}>
+    <form className="card log-entry-form" onSubmit={handleSubmit}>
       <label>
         Datum
         <input
@@ -55,35 +79,27 @@ export default function LogEntryForm({ onSubmit }) {
           required
         />
       </label>
-      <label>
-        Gewicht (kg)
-        <input
-          type="number"
-          step="0.5"
-          min="0"
-          value={weightKg}
-          onChange={(e) => setWeightKg(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Wiederholungen
-        <input
-          type="number"
-          min="1"
-          value={reps}
-          onChange={(e) => setReps(e.target.value)}
-        />
-      </label>
-      <label>
-        Sätze
-        <input
-          type="number"
-          min="1"
-          value={sets}
-          onChange={(e) => setSets(e.target.value)}
-        />
-      </label>
+
+      <SliderField
+        label="Gewicht"
+        unit=" kg"
+        value={weightKg}
+        onChange={setWeightKg}
+        min={0}
+        max={300}
+        step={1}
+      />
+      <SliderField
+        label="Wiederholungen"
+        unit=""
+        value={reps}
+        onChange={setReps}
+        min={1}
+        max={30}
+        step={1}
+      />
+      <SliderField label="Sätze" unit="" value={sets} onChange={setSets} min={1} max={10} step={1} />
+
       <label>
         Notizen
         <input
@@ -94,7 +110,7 @@ export default function LogEntryForm({ onSubmit }) {
         />
       </label>
       {error && <p className="form-error">{error}</p>}
-      <button type="submit" disabled={submitting}>
+      <button type="submit" className="btn btn-primary" disabled={submitting}>
         {submitting ? 'Speichern…' : 'Eintrag speichern'}
       </button>
     </form>

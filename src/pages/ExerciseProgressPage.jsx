@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useWorkoutLogs } from '../hooks/useWorkoutLogs'
 import ProgressChart from '../components/ProgressChart'
+import ProgressStats from '../components/ProgressStats'
 import LogHistoryTable from '../components/LogHistoryTable'
 
 export default function ExerciseProgressPage() {
@@ -22,18 +23,19 @@ export default function ExerciseProgressPage() {
   return (
     <div className="page">
       <p>
-        <Link to="/">&larr; Zurück zum Dashboard</Link>
+        <Link to="/fortschritt">&larr; Zurück zur Übersicht</Link>
       </p>
       <h1>{exercise ? `Fortschritt: ${exercise.name}` : 'Fortschritt'}</h1>
-      <p>
-        <Link to={`/log/${exerciseId}`}>Neuen Eintrag loggen</Link>
-      </p>
+      <Link to={`/log/${exerciseId}`} className="btn btn-primary">
+        Neuen Eintrag loggen
+      </Link>
 
       {loading && <p>Lade…</p>}
       {error && <p className="form-error">{error}</p>}
 
       {!loading && !error && (
         <>
+          <ProgressStats logs={logs} />
           <ProgressChart logs={logs} />
           <LogHistoryTable logs={logs} onDelete={deleteLog} />
         </>

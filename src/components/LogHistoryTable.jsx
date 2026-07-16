@@ -4,33 +4,26 @@ export default function LogHistoryTable({ logs, onDelete }) {
   }
 
   return (
-    <table className="log-history-table">
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Gewicht (kg)</th>
-          <th>Wdh.</th>
-          <th>Sätze</th>
-          <th>Notizen</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {logs.map((log) => (
-          <tr key={log.id}>
-            <td>{log.logged_date}</td>
-            <td>{log.weight_kg}</td>
-            <td>{log.reps ?? '–'}</td>
-            <td>{log.sets ?? '–'}</td>
-            <td>{log.notes ?? '–'}</td>
-            <td>
-              <button className="link-button" onClick={() => onDelete(log.id)}>
-                Löschen
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ul className="log-card-list">
+      {logs.map((log) => (
+        <li key={log.id} className="card log-card">
+          <div className="log-card-main">
+            <span className="log-card-weight">{log.weight_kg} kg</span>
+            <span className="log-card-date">{log.logged_date}</span>
+          </div>
+          <div className="log-card-details">
+            {log.reps != null && log.sets != null && (
+              <span>
+                {log.sets} × {log.reps} Wdh.
+              </span>
+            )}
+            {log.notes && <span>{log.notes}</span>}
+          </div>
+          <button className="link-button" onClick={() => onDelete(log.id)}>
+            Löschen
+          </button>
+        </li>
+      ))}
+    </ul>
   )
 }

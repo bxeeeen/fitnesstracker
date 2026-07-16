@@ -1,12 +1,15 @@
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
+
+const GRADIENT_FROM = '#0000FF'
+const GRADIENT_TO = '#00003A'
 
 export default function ProgressChart({ logs }) {
   if (logs.length < 2) {
@@ -22,15 +25,32 @@ export default function ProgressChart({ logs }) {
     .map((log) => ({ date: log.logged_date, weight: Number(log.weight_kg) }))
 
   return (
-    <div className="progress-chart">
+    <div className="card progress-chart">
       <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" />
+        <AreaChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="progressStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor={GRADIENT_FROM} />
+              <stop offset="100%" stopColor={GRADIENT_TO} />
+            </linearGradient>
+            <linearGradient id="progressFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={GRADIENT_FROM} stopOpacity={0.35} />
+              <stop offset="100%" stopColor={GRADIENT_TO} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
           <XAxis dataKey="date" />
           <YAxis unit=" kg" domain={['dataMin - 5', 'dataMax + 5']} />
           <Tooltip formatter={(value) => [`${value} kg`, 'Gewicht']} />
-          <Line type="monotone" dataKey="weight" stroke="#2563eb" strokeWidth={2} dot />
-        </LineChart>
+          <Area
+            type="monotone"
+            dataKey="weight"
+            stroke="url(#progressStroke)"
+            strokeWidth={3}
+            fill="url(#progressFill)"
+            dot={{ stroke: GRADIENT_FROM, strokeWidth: 2, fill: '#fff', r: 4 }}
+          />
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   )

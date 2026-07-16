@@ -8,7 +8,7 @@ export default function LogEntryPage() {
   const { exerciseId } = useParams()
   const navigate = useNavigate()
   const [exercise, setExercise] = useState(null)
-  const { addLog } = useWorkoutLogs(exerciseId)
+  const { logs, addLog } = useWorkoutLogs(exerciseId)
 
   useEffect(() => {
     supabase
@@ -33,7 +33,7 @@ export default function LogEntryPage() {
         <Link to="/">&larr; Zurück zum Dashboard</Link>
       </p>
       <h1>{exercise ? `Eintrag: ${exercise.name}` : 'Eintrag loggen'}</h1>
-      <LogEntryForm onSubmit={handleSubmit} />
+      <LogEntryForm onSubmit={handleSubmit} lastLog={logs[0]} />
     </div>
   )
 }

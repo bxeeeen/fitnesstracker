@@ -11,24 +11,23 @@ export default function ExercisePicker({ exercises, selectedIds, onToggle }) {
       {grouped.map(({ group, items }) => (
         <div key={group} className="exercise-picker-group">
           <h3>{group}</h3>
-          <ul>
+          <div className="tile-grid">
             {items.map((exercise) => {
               const isSelected = selectedIds.has(exercise.id)
               return (
-                <li key={exercise.id}>
-                  <label className="exercise-picker-item">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => onToggle(exercise, isSelected)}
-                    />
-                    {exercise.name}
-                    {exercise.is_custom && <span className="badge">eigene</span>}
-                  </label>
-                </li>
+                <button
+                  key={exercise.id}
+                  type="button"
+                  className={`tile${isSelected ? ' selected' : ''}`}
+                  onClick={() => onToggle(exercise, isSelected)}
+                  aria-pressed={isSelected}
+                >
+                  {exercise.is_custom && <span className="tile-badge">eigene</span>}
+                  <span className="tile-label">{exercise.name}</span>
+                </button>
               )
             })}
-          </ul>
+          </div>
         </div>
       ))}
     </div>

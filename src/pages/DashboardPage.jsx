@@ -1,44 +1,30 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { useUserExercises } from '../hooks/useUserExercises'
+import { useLatestLogs } from '../hooks/useLatestLogs'
+import { getGreeting } from '../lib/greetings'
 
 export default function DashboardPage() {
-  const { user } = useAuth()
+  const { profile } = useAuth()
   const { userExercises, loading, error } = useUserExercises()
-  const [latestLogs, setLatestLogs] = useState([])
+  const { latestByExercise } = useLatestLogs()
 
-  useEffect(() => {
-    if (!user) return
-    supabase
-      .from('workout_logs')
-      .select('exercise_id, weight_kg, logged_date')
-      .eq('user_id', user.id)
-      .order('logged_date', { ascending: false })
-      .then(({ data }) => setLatestLogs(data ?? []))
-  }, [user])
-
-  const latestByExercise = useMemo(() => {
-    const map = new Map()
-    for (const log of latestLogs) {
-      if (!map.has(log.exercise_id)) {
-        map.set(log.exercise_id, log)
-      }
-    }
-    return map
-  }, [latestLogs])
+  const { greeting, subtitle } = useMemo(() => getGreeting(profile?.name), [profile?.name])
 
   return (
     <div className="page">
-      <h1>Dashboard</h1>
+      <div className="greeting-header">
+        <h1>{greeting}</h1>
+        <p>{subtitle}</p>
+      </div>
 
       {loading && <p>Lade…</p>}
       {error && <p className="form-error">{error}</p>}
 
       {!loading && !error && userExercises.length === 0 && (
         <p className="page-hint">
-          Du hast noch keine Geräte ausgewählt. <Link to="/geraete">Jetzt Geräte auswählen</Link>
+          Du hast noch keine Geräte ausgewählt. <Link to="/ich/geraete">Jetzt Geräte auswählen</Link>
         </p>
       )}
 
@@ -46,7 +32,7 @@ export default function DashboardPage() {
         {userExercises.map(({ exercise_id, exercises: exercise }) => {
           const latest = latestByExercise.get(exercise_id)
           return (
-            <li key={exercise_id} className="dashboard-item">
+            <li key={exercise_id} className="card dashboard-item">
               <div className="dashboard-item-info">
                 <strong>{exercise.name}</strong>
                 <span className="dashboard-item-muscle">{exercise.muscle_group}</span>
@@ -59,8 +45,12 @@ export default function DashboardPage() {
                 )}
               </div>
               <div className="dashboard-item-actions">
-                <Link to={`/log/${exercise_id}`}>Loggen</Link>
-                <Link to={`/fortschritt/${exercise_id}`}>Fortschritt</Link>
+                <Link to={`/log/${exercise_id}`} className="btn btn-primary">
+                  Loggen
+                </Link>
+                <Link to={`/fortschritt/${exercise_id}`} className="btn btn-secondary">
+                  Fortschritt
+                </Link>
               </div>
             </li>
           )
