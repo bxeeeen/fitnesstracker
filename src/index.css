@@ -3,6 +3,7 @@
   --color-powder-blue: #92afd7;
   --color-blue-slate: #5a7684;
   --color-granite: #395b50;
+  --color-granite-soft: #607a71;
   --color-evergreen: #1f2f16;
 
   --bg: #faf8f3;
@@ -91,7 +92,7 @@ button {
   margin: 0 auto;
   padding: 20px 16px;
   padding-bottom: calc(88px + env(safe-area-inset-bottom));
-  background: linear-gradient(135deg, var(--color-granite) 0, var(--bg) 480px);
+  background: linear-gradient(135deg, var(--color-granite-soft) 0, var(--bg) 240px);
 }
 
 .page {
@@ -205,6 +206,10 @@ button {
   color: rgba(255, 255, 255, 0.88);
 }
 
+.profile-hero {
+  margin-bottom: 20px;
+}
+
 .profile-hero h1 {
   font-size: 2.6rem;
   margin-bottom: 4px;
@@ -221,7 +226,7 @@ button {
   background: var(--accent-gradient);
   border-radius: 20px;
   padding: 24px 20px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .greeting-card h1 {
@@ -462,16 +467,25 @@ select {
 }
 
 .exercise-picker-group {
-  margin-bottom: 28px;
+  margin-bottom: 36px;
 }
 
 .exercise-picker-group h3 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  margin-bottom: 14px;
 }
 
 .exercise-picker-group:last-child {
   margin-bottom: 0;
+}
+
+.exercise-picker-count {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  vertical-align: middle;
+  margin-left: 6px;
 }
 
 /* Sticky confirm bar — floats in the lower third of the viewport, above the nav */
@@ -513,30 +527,49 @@ select {
   box-shadow: 0 8px 24px rgba(57, 91, 80, 0.28);
 }
 
+.confirm-bar-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 608px;
+  pointer-events: auto;
+}
+
+.confirm-bar-actions .btn {
+  flex: 1;
+  box-shadow: 0 8px 24px rgba(57, 91, 80, 0.28);
+}
+
+/* Onboarding has no bottom nav, so its floating bar sits closer to the edge */
+
+.onboarding-page .confirm-bar {
+  bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .tile {
   position: relative;
-  min-height: 56px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-  padding: 12px 14px;
-  border-radius: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
   color: var(--text);
-  font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1.25;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
   overflow: hidden;
   transition: color 180ms ease, border-color 180ms ease, transform 160ms var(--ease-out), box-shadow 180ms ease;
 }
@@ -581,12 +614,13 @@ select {
 
 .tile-badge {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 8px;
+  right: 8px;
   font-size: 0.6rem;
+  font-weight: 600;
   background: rgba(31, 47, 22, 0.15);
-  border-radius: 4px;
-  padding: 1px 5px;
+  border-radius: 999px;
+  padding: 2px 8px;
 }
 
 /* Bottom nav — liquid glass */
@@ -634,7 +668,7 @@ select {
   max-width: 640px;
   margin: 0 auto;
   width: 100%;
-  padding: 20px 16px;
+  padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
 }
 
 .onboarding-steps {
@@ -651,15 +685,6 @@ select {
 }
 
 .onboarding-step {
-  flex: 1;
-}
-
-.onboarding-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.onboarding-actions .btn {
   flex: 1;
 }
 

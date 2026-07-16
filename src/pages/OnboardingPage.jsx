@@ -52,14 +52,11 @@ export default function OnboardingPage() {
           <h1>Willkommen!</h1>
           <p className="page-hint">Wähle die Geräte aus, an denen du trainierst. Du kannst das später jederzeit ändern.</p>
           <ExerciseCatalogEditor />
-          <button type="button" className="btn btn-primary" onClick={() => setStep('info')}>
-            Weiter
-          </button>
         </div>
       )}
 
       {step === 'info' && (
-        <form className="page onboarding-step" onSubmit={handleFinish}>
+        <form id="onboarding-info-form" className="page onboarding-step" onSubmit={handleFinish}>
           <h1>Über dich</h1>
           <p className="page-hint">Optional — kannst du auch später im Ich-Bereich nachtragen.</p>
 
@@ -87,16 +84,28 @@ export default function OnboardingPage() {
               onChange={(e) => setWeightKg(e.target.value)}
             />
           </label>
+        </form>
+      )}
 
-          <div className="onboarding-actions">
+      {step === 'exercises' && (
+        <div className="confirm-bar">
+          <button type="button" className="btn btn-primary" onClick={() => setStep('info')}>
+            Weiter
+          </button>
+        </div>
+      )}
+
+      {step === 'info' && (
+        <div className="confirm-bar">
+          <div className="confirm-bar-actions">
             <button type="button" className="btn btn-secondary" onClick={handleSkip} disabled={submitting}>
               Überspringen
             </button>
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
-              Fertig
+            <button type="submit" form="onboarding-info-form" className="btn btn-primary" disabled={submitting}>
+              {submitting ? 'Speichern…' : 'Fertig'}
             </button>
           </div>
-        </form>
+        </div>
       )}
     </div>
   )

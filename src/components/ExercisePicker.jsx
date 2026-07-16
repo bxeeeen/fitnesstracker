@@ -10,7 +10,10 @@ export default function ExercisePicker({ exercises, selectedIds, onToggle }) {
     <div className="exercise-picker">
       {grouped.map(({ group, items }) => (
         <div key={group} className="exercise-picker-group">
-          <h3>{group}</h3>
+          <h3>
+            {group}
+            <span className="exercise-picker-count">{items.length}</span>
+          </h3>
           <div className="tile-grid">
             {items.map((exercise) => {
               const isSelected = selectedIds.has(exercise.id)
