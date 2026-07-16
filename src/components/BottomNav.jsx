@@ -13,6 +13,14 @@ const ProgressIcon = () => (
   </svg>
 )
 
+const DumbbellIcon = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M2 12h2M20 12h2M6 12h12" strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="4" y="8.5" width="3" height="7" rx="1" />
+    <rect x="17" y="8.5" width="3" height="7" rx="1" />
+  </svg>
+)
+
 const ProfileIcon = () => (
   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2">
     <circle cx="12" cy="8" r="4" />
@@ -30,6 +38,10 @@ export default function BottomNav() {
       <NavLink to="/fortschritt" className="bottom-nav-item">
         <ProgressIcon />
         <span>Fortschritt</span>
+      </NavLink>
+      <NavLink to="/geraete" className="bottom-nav-item">
+        <DumbbellIcon />
+        <span>Geräte</span>
       </NavLink>
       <NavLink to="/ich" className="bottom-nav-item">
         <ProfileIcon />

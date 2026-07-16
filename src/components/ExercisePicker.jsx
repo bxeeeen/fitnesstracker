@@ -22,8 +22,8 @@ export default function ExercisePicker({ exercises, selectedIds, onToggle }) {
                   onClick={() => onToggle(exercise, isSelected)}
                   aria-pressed={isSelected}
                 >
-                  {exercise.is_custom && <span className="tile-badge">eigene</span>}
                   <span className="tile-label">{exercise.name}</span>
+                  {exercise.is_custom && <span className="tile-badge">eigene</span>}
                 </button>
               )
             })}

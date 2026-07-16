@@ -4,7 +4,7 @@ import { useUserExercises } from '../hooks/useUserExercises'
 import ExercisePicker from './ExercisePicker'
 import CustomExerciseForm from './CustomExerciseForm'
 
-export default function ExerciseCatalogEditor() {
+export default function ExerciseCatalogEditor({ onChange }) {
   const { exercises, loading: exercisesLoading, error: exercisesError, refetch: refetchExercises } =
     useExercises()
   const {
@@ -21,30 +21,30 @@ export default function ExerciseCatalogEditor() {
   )
 
   async function handleToggle(exercise, isSelected) {
-    if (isSelected) {
-      await removeExercise(exercise.id)
-    } else {
-      await addExercise(exercise.id)
-    }
+    const result = isSelected ? await removeExercise(exercise.id) : await addExercise(exercise.id)
+    if (!result.error) onChange?.()
   }
 
   async function handleCreated() {
     await refetchExercises()
+    onChange?.()
   }
 
-  const loading = exercisesLoading || userExercisesLoading
   const error = exercisesError || userExercisesError
+  // Nur beim allerersten Laden eine Ladeanzeige zeigen — nicht bei jedem
+  // Refetch nach einem Toggle, sonst hängt/springt das Grid (unmount/remount).
+  const initialLoading = (exercisesLoading || userExercisesLoading) && exercises.length === 0
 
   return (
     <div className="exercise-catalog-editor">
-      <CustomExerciseForm onCreated={handleCreated} />
-
-      {loading && <p>Lade…</p>}
+      {initialLoading && <p>Lade…</p>}
       {error && <p className="form-error">{error}</p>}
 
-      {!loading && !error && (
+      {!error && exercises.length > 0 && (
         <ExercisePicker exercises={exercises} selectedIds={selectedIds} onToggle={handleToggle} />
       )}
+
+      <CustomExerciseForm onCreated={handleCreated} />
     </div>
   )
 }

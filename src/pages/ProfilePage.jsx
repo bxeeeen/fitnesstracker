@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 
@@ -42,8 +42,10 @@ export default function ProfilePage() {
 
   return (
     <div className="page">
-      <h1>Ich</h1>
-      <p className="page-hint">{user?.email}</p>
+      <div className="page-hero">
+        <h1>Ich</h1>
+        <p>{user?.email}</p>
+      </div>
 
       <form className="card profile-form" onSubmit={handleSave}>
         <label>
@@ -79,10 +81,6 @@ export default function ProfilePage() {
           {submitting ? 'Speichern…' : 'Speichern'}
         </button>
       </form>
-
-      <Link to="/ich/geraete" className="card profile-link">
-        Meine Geräte verwalten →
-      </Link>
 
       <button type="button" className="btn btn-secondary" onClick={handleLogout}>
         Abmelden

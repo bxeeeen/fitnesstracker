@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useUserExercises } from '../hooks/useUserExercises'
 import { useLatestLogs } from '../hooks/useLatestLogs'
@@ -8,13 +8,22 @@ import { getGreeting } from '../lib/greetings'
 export default function DashboardPage() {
   const { profile } = useAuth()
   const { userExercises, loading, error } = useUserExercises()
-  const { latestByExercise } = useLatestLogs()
+  const { latestByExercise, refetch: refetchLatest } = useLatestLogs()
+  const location = useLocation()
+
+  // Home bleibt hinter Log-/Fortschritt-Overlays durchgehend gemountet, darum
+  // hier neu laden, sobald kein Overlay mehr offen ist (z.B. nach dem Loggen).
+  useEffect(() => {
+    if (!location.state?.backgroundLocation) {
+      refetchLatest()
+    }
+  }, [location])
 
   const { greeting, subtitle } = useMemo(() => getGreeting(profile?.name), [profile?.name])
 
   return (
     <div className="page">
-      <div className="greeting-header">
+      <div className="greeting-card">
         <h1>{greeting}</h1>
         <p>{subtitle}</p>
       </div>
@@ -24,7 +33,7 @@ export default function DashboardPage() {
 
       {!loading && !error && userExercises.length === 0 && (
         <p className="page-hint">
-          Du hast noch keine Geräte ausgewählt. <Link to="/ich/geraete">Jetzt Geräte auswählen</Link>
+          Du hast noch keine Geräte ausgewählt. <Link to="/geraete">Jetzt Geräte auswählen</Link>
         </p>
       )}
 
@@ -45,11 +54,12 @@ export default function DashboardPage() {
                 )}
               </div>
               <div className="dashboard-item-actions">
-                <Link to={`/log/${exercise_id}`} className="btn btn-primary">
+                <Link
+                  to={`/log/${exercise_id}`}
+                  state={{ backgroundLocation: location }}
+                  className="btn btn-primary"
+                >
                   Loggen
-                </Link>
-                <Link to={`/fortschritt/${exercise_id}`} className="btn btn-secondary">
-                  Fortschritt
                 </Link>
               </div>
             </li>

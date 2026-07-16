@@ -13,7 +13,7 @@ colors:
 typography:
   display:
     fontFamily: "Instrument Serif, Inter, system-ui, serif"
-    fontSize: "2rem"
+    fontSize: "2.2rem"
     fontWeight: 400
     lineHeight: 1.2
   body:

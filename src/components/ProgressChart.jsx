@@ -11,6 +11,11 @@ import {
 const GRADIENT_FROM = '#5A7684'
 const GRADIENT_TO = '#395B50'
 
+function formatDateShort(isoDate) {
+  const [year, month, day] = isoDate.split('-')
+  return `${day}/${month}/${year.slice(2)}`
+}
+
 export default function ProgressChart({ logs }) {
   if (logs.length < 2) {
     return (
@@ -39,9 +44,12 @@ export default function ProgressChart({ logs }) {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-          <XAxis dataKey="date" />
-          <YAxis unit=" kg" domain={['dataMin - 5', 'dataMax + 5']} />
-          <Tooltip formatter={(value) => [`${value} kg`, 'Gewicht']} />
+          <XAxis dataKey="date" tickFormatter={formatDateShort} tick={{ fontSize: 10 }} />
+          <YAxis unit=" kg" domain={['dataMin - 5', 'dataMax + 5']} tick={{ fontSize: 10 }} width={48} />
+          <Tooltip
+            formatter={(value) => [`${value} kg`, 'Gewicht']}
+            labelFormatter={formatDateShort}
+          />
           <Area
             type="monotone"
             dataKey="weight"
