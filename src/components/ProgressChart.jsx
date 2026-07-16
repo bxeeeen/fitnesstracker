@@ -8,8 +8,8 @@ import {
   YAxis,
 } from 'recharts'
 
-const GRADIENT_FROM = '#0000FF'
-const GRADIENT_TO = '#00003A'
+const GRADIENT_FROM = '#5A7684'
+const GRADIENT_TO = '#395B50'
 
 export default function ProgressChart({ logs }) {
   if (logs.length < 2) {

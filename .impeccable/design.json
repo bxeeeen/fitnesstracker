@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-16T00:00:00.000Z",
+  "title": "Design System: Fitnesstracker",
+  "extensions": {
+    "colorMeta": {
+      "lavender": {
+        "role": "secondary-light",
+        "displayName": "Lavender",
+        "canonical": "#C5D1EB",
+        "tonalRamp": ["#1a2030", "#2e3850", "#455470", "#5d708f", "#8b9dc0", "#c5d1eb", "#dbe3f3", "#eef1fa"]
+      },
+      "powder-blue": {
+        "role": "secondary-light",
+        "displayName": "Powder Blue",
+        "canonical": "#92AFD7",
+        "tonalRamp": ["#101823", "#1f2e42", "#324a64", "#4d6c8c", "#6f92b8", "#92afd7", "#bcd0e8", "#e2ecf6"]
+      },
+      "blue-slate": {
+        "role": "primary",
+        "displayName": "Blue Slate",
+        "canonical": "#5A7684",
+        "tonalRamp": ["#0d1315", "#182226", "#263740", "#3a525d", "#4d6774", "#5a7684", "#8ba3ae", "#c4d2d7"]
+      },
+      "granite": {
+        "role": "primary-deep",
+        "displayName": "Granite",
+        "canonical": "#395B50",
+        "tonalRamp": ["#080d0b", "#0f1a16", "#1a2d27", "#284439", "#395b50", "#5c8779", "#8fb2a6", "#c9dcd5"]
+      },
+      "evergreen": {
+        "role": "neutral-ink",
+        "displayName": "Evergreen",
+        "canonical": "#1F2F16",
+        "tonalRamp": ["#050803", "#0d1408", "#152110", "#1f2f16", "#33502a", "#547a45", "#89ab7c", "#c6dabf"]
+      },
+      "off-white": {
+        "role": "neutral-bg",
+        "displayName": "Off-White",
+        "canonical": "#FAF8F3",
+        "tonalRamp": ["#2b2924", "#57534a", "#847d70", "#b0a99c", "#d6d1c5", "#eeebe2", "#faf8f3", "#fdfcfa"]
+      },
+      "surface-white": { "role": "neutral-surface", "displayName": "Surface White", "canonical": "#FFFFFF", "tonalRamp": ["#333333", "#666666", "#999999", "#cccccc", "#e6e6e6", "#f2f2f2", "#ffffff", "#ffffff"] },
+      "danger": { "role": "utility", "displayName": "Warm Danger Red", "canonical": "#B3433A", "tonalRamp": ["#2a0f0c", "#451915", "#6a2620", "#8c332b", "#b3433a", "#ca6d61", "#e0a196", "#f2d3cd"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Instrument Serif)", "purpose": "Page titles, greeting headline, section headings, and any number that represents achieved progress. Never on functional chrome." },
+      "body": { "displayName": "Body (Inter)", "purpose": "All form labels, inputs, buttons, nav labels, and running text." }
+    },
+    "shadows": [
+      { "name": "glass-elevation", "value": "0 8px 32px rgba(90,118,132,0.16), inset 0 1px 0 rgba(255,255,255,0.6)", "purpose": "Default elevation for every liquid-glass surface (cards, tiles, auth form, stat cards)." },
+      { "name": "tile-selected-glow", "value": "0 8px 24px rgba(57,91,80,0.28)", "purpose": "Deeper Granite-tinted shadow under a selected exercise tile." },
+      { "name": "slider-thumb", "value": "0 2px 6px rgba(90,118,132,0.4)", "purpose": "Small tinted shadow on the draggable slider thumb." },
+      { "name": "nav-elevation", "value": "0 -4px 24px rgba(90,118,132,0.1)", "purpose": "Upward-cast soft shadow separating the glass bottom nav from content." }
+    ],
+    "motion": [
+      { "name": "tile-select", "value": "opacity 180ms ease (crossfade overlay), transform 160ms cubic-bezier(0.23,1,0.32,1)", "purpose": "Gradient fill crossfades in via a separate overlay layer since CSS cannot transition between a flat color and a gradient directly." }
+    ],
+    "breakpoints": [
+      { "name": "content-max", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary action on a screen — Loggen, Eintrag speichern, Fertig.",
+      "html": "<button class=\"ds-btn-primary\">Loggen</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 12px; padding: 12px 18px; font: 600 1rem Inter, system-ui, sans-serif; background: linear-gradient(135deg, #5A7684, #395B50); color: #FFFFFF; cursor: pointer; transition: transform 160ms cubic-bezier(0.23,1,0.32,1), filter 160ms ease; } .ds-btn-primary:hover { filter: brightness(1.08); } .ds-btn-primary:active { transform: scale(0.97); } .ds-btn-primary:focus-visible { outline: 2px solid #5A7684; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Any non-primary action — Fortschritt, Überspringen, Abmelden. Stays solid white, never glass.",
+      "html": "<button class=\"ds-btn-secondary\">Fortschritt</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(90,118,132,0.18); border-radius: 12px; padding: 12px 18px; font: 600 1rem Inter, system-ui, sans-serif; background: #FFFFFF; color: #1F2F16; cursor: pointer; transition: border-color 160ms ease, transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-secondary:hover { border-color: rgba(31,47,22,0.3); } .ds-btn-secondary:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Liquid Glass Card",
+      "kind": "card",
+      "refersTo": "card-glass",
+      "description": "Generic translucent, blurred surface for dashboard items, forms, and stat rows — hue-tinted shadow, inner highlight edge.",
+      "html": "<div class=\"ds-card\"><strong class=\"ds-card-title\">Bankdrücken</strong><span class=\"ds-card-sub\">Letztes Gewicht: 70 kg</span></div>",
+      "css": ".ds-card { background: rgba(255,255,255,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.65); border-radius: 16px; padding: 16px; box-shadow: 0 8px 32px rgba(90,118,132,0.16), inset 0 1px 0 rgba(255,255,255,0.6); display: flex; flex-direction: column; gap: 4px; } .ds-card-title { font: 400 1.1rem 'Instrument Serif', serif; color: #1F2F16; } .ds-card-sub { font: 400 0.85rem Inter, system-ui, sans-serif; color: rgba(31,47,22,0.62); }"
+    },
+    {
+      "name": "Exercise Tile — Selected",
+      "kind": "chip",
+      "refersTo": "tile-selected",
+      "description": "A chosen exercise in the picker grid — glass base with the brand gradient crossfaded on top, deeper tinted shadow.",
+      "html": "<button class=\"ds-tile ds-tile-selected\">Bankdrücken</button>",
+      "css": ".ds-tile { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px; border-radius: 16px; font: 500 0.8rem Inter, system-ui, sans-serif; cursor: pointer; transition: color 180ms ease, box-shadow 180ms ease, transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-tile-selected { background: linear-gradient(135deg, #5A7684, #395B50); color: #FFFFFF; border: 1px solid transparent; box-shadow: 0 8px 24px rgba(57,91,80,0.28); }"
+    },
+    {
+      "name": "Exercise Tile — Unselected",
+      "kind": "chip",
+      "refersTo": "tile-unselected",
+      "description": "An available-but-not-chosen exercise — liquid glass, translucent over the off-white canvas.",
+      "html": "<button class=\"ds-tile ds-tile-unselected\">Latzug</button>",
+      "css": ".ds-tile { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px; border-radius: 16px; font: 500 0.8rem Inter, system-ui, sans-serif; cursor: pointer; transition: color 180ms ease, box-shadow 180ms ease, transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-tile-unselected { background: rgba(255,255,255,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #33423B; border: 1px solid rgba(255,255,255,0.65); box-shadow: 0 8px 32px rgba(90,118,132,0.16), inset 0 1px 0 rgba(255,255,255,0.6); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": null,
+      "description": "Standard text/number/date field — solid white, not glass, for legibility.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Name der Übung\" />",
+      "css": ".ds-input { font: 400 1rem Inter, system-ui, sans-serif; padding: 10px; border: 1px solid rgba(90,118,132,0.18); border-radius: 10px; background: #FFFFFF; color: #1F2F16; } .ds-input:focus-visible { outline: 2px solid #5A7684; outline-offset: 1px; }"
+    },
+    {
+      "name": "Weight Slider",
+      "kind": "input",
+      "refersTo": null,
+      "description": "Range input for weight/reps/sets — gradient-filled thumb with a tinted shadow, scales up on drag.",
+      "html": "<input class=\"ds-slider\" type=\"range\" min=\"0\" max=\"300\" value=\"70\" />",
+      "css": ".ds-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; background: rgba(90,118,132,0.18); outline: none; } .ds-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, #5A7684, #395B50); border: 2px solid #FFFFFF; box-shadow: 0 2px 6px rgba(90,118,132,0.4); cursor: pointer; transition: transform 120ms cubic-bezier(0.23,1,0.32,1); } .ds-slider:active::-webkit-slider-thumb { transform: scale(1.15); }"
+    },
+    {
+      "name": "Bottom Navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Fixed glass bottom nav on a warm off-white canvas — translucent, blurred, softly shadowed upward.",
+      "html": "<nav class=\"ds-bottom-nav\"><a class=\"ds-nav-item ds-nav-item-active\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 11.5 12 4l9 7.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Home</span></a><a class=\"ds-nav-item\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 19V10M10 19V5M16 19v-7M22 19H2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Fortschritt</span></a><a class=\"ds-nav-item\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c1.5-4 5-6 8-6s6.5 2 8 6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Ich</span></a></nav>",
+      "css": ".ds-bottom-nav { display: flex; justify-content: space-around; background: rgba(255,255,255,0.68); backdrop-filter: blur(24px); border-top: 1px solid rgba(255,255,255,0.65); box-shadow: 0 -4px 24px rgba(90,118,132,0.1); padding: 10px 16px; } .ds-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: rgba(31,47,22,0.62); font: 400 0.7rem Inter, system-ui, sans-serif; padding: 4px 16px; border-radius: 12px; } .ds-nav-item-active { color: #5A7684; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Glass Ledger",
+    "overview": "Fitnesstracker's second design pass moves deliberately away from its first identity (dark-by-default, Void Black + Electric Blue) toward something welcoming. The canvas is a warm off-white, never stark white and never dark. Every surface that used to be a flat bordered card is now liquid glass: translucent, soft-edged, gently blurred, with a hue-tinted shadow instead of a hard black one. The brand color is a five-step blue-to-green family (Lavender → Powder Blue → Blue Slate → Granite → Evergreen) that reads as one continuous, calming gradient.",
+    "keyCharacteristics": [
+      "Warm off-white canvas, light-only — no dark mode",
+      "Liquid-glass surfaces everywhere: translucent, blurred, hue-tinted shadow, inner highlight edge",
+      "One locked accent family (five-color blue-to-green gradient), never mixed with an unrelated hue",
+      "Instrument Serif (explicitly brand-chosen) for milestone numbers and headings, Inter for everything functional"
+    ],
+    "rules": [
+      { "name": "The One Family Rule", "body": "Every accent in the app draws from the same five-color family. No unrelated hue is ever introduced, including for the success indicator.", "section": "colors" },
+      { "name": "The Contrast-Checked Gradient Rule", "body": "The primary gradient runs Blue Slate → Granite, not Lavender or Powder Blue, because the lighter two colors fail white-text contrast (Powder Blue + white ≈ 2.25:1).", "section": "colors" },
+      { "name": "The Serif-Is-Earned Rule", "body": "Instrument Serif only renders numbers or headings that represent a milestone or a title — never a button, a form label, or a badge.", "section": "typography" },
+      { "name": "The Tinted-Shadow Rule", "body": "No shadow in this system is pure black. Every shadow's rgba uses Blue Slate or Granite as its color channel.", "section": "elevation" },
+      { "name": "The Reduced-Transparency Fallback Rule", "body": "Every glass surface has a prefers-reduced-transparency fallback that swaps translucency for a solid white fill and a plain hairline border.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every accent inside the five-color Lavender-to-Evergreen family — no outside hue.",
+      "Do use Blue Slate → Granite (never Lavender or Powder Blue) for any surface needing white text over the gradient.",
+      "Do tint every shadow toward Blue Slate or Granite — never a plain black drop shadow.",
+      "Do keep buttons and form inputs solid and opaque even while cards and tiles are glass.",
+      "Do provide a prefers-reduced-transparency solid-fill fallback on every glass surface."
+    ],
+    "donts": [
+      "Don't reintroduce dark mode — this app is light-only by deliberate decision.",
+      "Don't use Powder Blue or Lavender as a button or tile-selected background — both fail WCAG AA contrast with white text.",
+      "Don't add steps, sleep, calories, hydration, or a social/friends feed.",
+      "Don't use Instrument Serif for buttons, labels, badges, or any functional chrome.",
+      "Don't apply a pure-black or ungraded gray shadow anywhere."
+    ]
+  }
+}
