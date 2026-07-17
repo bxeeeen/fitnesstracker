@@ -35,23 +35,57 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-  /* Squircle masks — true superellipse corners (|x|^4 + |y|^4 = 1), not a
-     circular-arc border-radius approximation, stretched over each element via
-     mask-size:100% 100% so no ResizeObserver or per-element JS is needed.
-     Fully round/pill shapes (spinner, slider thumb, badges, close buttons)
-     are left as plain border-radius. */
-  --squircle-sm: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M78,0 L86.7,0.1 L90.2,0.5 L92.8,1.2 L94.9,2.2 L96.5,3.5 L97.8,5.1 L98.8,7.2 L99.5,9.8 L99.9,13.3 L100,22 L100,78 L99.9,86.7 L99.5,90.2 L98.8,92.8 L97.8,94.9 L96.5,96.5 L94.9,97.8 L92.8,98.8 L90.2,99.5 L86.7,99.9 L78,100 L22,100 L13.3,99.9 L9.8,99.5 L7.2,98.8 L5.1,97.8 L3.5,96.5 L2.2,94.9 L1.2,92.8 L0.5,90.2 L0.1,86.7 L0,78 L0,22 L0.1,13.3 L0.5,9.8 L1.2,7.2 L2.2,5.1 L3.5,3.5 L5.1,2.2 L7.2,1.2 L9.8,0.5 L13.3,0.1 L22,0 Z'/%3E%3C/svg%3E");
-  --squircle-md: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M72,0 L83.1,0.2 L87.6,0.7 L90.9,1.6 L93.5,2.8 L95.5,4.5 L97.2,6.5 L98.4,9.1 L99.3,12.4 L99.8,16.9 L100,28 L100,72 L99.8,83.1 L99.3,87.6 L98.4,90.9 L97.2,93.5 L95.5,95.5 L93.5,97.2 L90.9,98.4 L87.6,99.3 L83.1,99.8 L72,100 L28,100 L16.9,99.8 L12.4,99.3 L9.1,98.4 L6.5,97.2 L4.5,95.5 L2.8,93.5 L1.6,90.9 L0.7,87.6 L0.2,83.1 L0,72 L0,28 L0.2,16.9 L0.7,12.4 L1.6,9.1 L2.8,6.5 L4.5,4.5 L6.5,2.8 L9.1,1.6 L12.4,0.7 L16.9,0.2 L28,0 Z'/%3E%3C/svg%3E");
-  --squircle-lg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M66,0 L79.4,0.2 L84.9,0.8 L88.9,1.9 L92.1,3.4 L94.6,5.4 L96.6,7.9 L98.1,11.1 L99.2,15.1 L99.8,20.6 L100,34 L100,66 L99.8,79.4 L99.2,84.9 L98.1,88.9 L96.6,92.1 L94.6,94.6 L92.1,96.6 L88.9,98.1 L84.9,99.2 L79.4,99.8 L66,100 L34,100 L20.6,99.8 L15.1,99.2 L11.1,98.1 L7.9,96.6 L5.4,94.6 L3.4,92.1 L1.9,88.9 L0.8,84.9 L0.2,79.4 L0,66 L0,34 L0.2,20.6 L0.8,15.1 L1.9,11.1 L3.4,7.9 L5.4,5.4 L7.9,3.4 L11.1,1.9 L15.1,0.8 L20.6,0.2 L34,0 Z'/%3E%3C/svg%3E");
-  /* Modal width can range from ~330px to 640px, so this uses a much smaller
-     corner inset than the other tiers, otherwise the curve overwhelms the
-     sheet and intrudes into the title area. */
-  --squircle-modal: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M90,0 L94,0.1 L95.6,0.2 L96.7,0.6 L97.7,1 L98.4,1.6 L99,2.3 L99.4,3.3 L99.8,4.4 L99.9,6 L100,10 L100,100 L0,100 L0,10 L0.1,6 L0.2,4.4 L0.6,3.3 L1,2.3 L1.6,1.6 L2.3,1 L3.3,0.6 L4.4,0.2 L6,0.1 L10,0 Z'/%3E%3C/svg%3E");
+  /* Squircle corners — four reusable corner tiles, each a true superellipse
+     curve (|x|^4 + |y|^4 = 1) cut into one corner of its own tile. Applied as
+     fixed-pixel-size mask layers (see .squircle base rule below) positioned at
+     each corner of an element, unioned with a full-box fill layer. Fixed pixel
+     sizing means the curve never distorts regardless of the element's aspect
+     ratio, unlike a single mask stretched via mask-size:100% 100%. Fully
+     round/pill shapes (spinner, slider thumb, badges, close buttons) stay
+     plain border-radius. */
+  --squircle-corner-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 L36.1,0.4 L50.9,1.7 L61.9,3.9 L70.7,6.9 L78,10.9 L84.1,15.9 L89.1,22 L93.1,29.3 L96.1,38.1 L98.3,49.1 L99.6,63.9 L100,100 L0,100 Z'/%3E%3C/svg%3E");
+  --squircle-corner-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M100,0 L99.6,36.1 L98.3,50.9 L96.1,61.9 L93.1,70.7 L89.1,78 L84.1,84.1 L78,89.1 L70.7,93.1 L61.9,96.1 L50.9,98.3 L36.1,99.6 L0,100 L0,0 Z'/%3E%3C/svg%3E");
+  --squircle-corner-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M100,100 L63.9,99.6 L49.1,98.3 L38.1,96.1 L29.3,93.1 L22,89.1 L15.9,84.1 L10.9,78 L6.9,70.7 L3.9,61.9 L1.7,50.9 L0.4,36.1 L0,0 L100,0 Z'/%3E%3C/svg%3E");
+  --squircle-corner-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,100 L0.4,63.9 L1.7,49.1 L3.9,38.1 L6.9,29.3 L10.9,22 L15.9,15.9 L22,10.9 L29.3,6.9 L38.1,3.9 L49.1,1.7 L63.9,0.4 L100,0 L100,100 Z'/%3E%3C/svg%3E");
 
   color-scheme: light;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Shared squircle base — four fixed-pixel corner masks (sized via --corner,
+   set per selector below) unioned with a full-box fill layer. Fixed-pixel
+   sizing means each corner keeps its exact curve regardless of the element's
+   own width/height, unlike a single mask stretched to 100% 100%. */
+.card,
+.auth-form,
+.tile,
+.stat-card,
+.greeting-card,
+.btn,
+input,
+select,
+.bottom-nav-item,
+.log-card-delete,
+.dashboard-log-btn,
+.log-entry-form,
+.profile-form,
+.custom-exercise-form {
+  -webkit-mask-image: linear-gradient(#000, #000), var(--squircle-corner-tr), var(--squircle-corner-br),
+    var(--squircle-corner-bl), var(--squircle-corner-tl);
+  mask-image: linear-gradient(#000, #000), var(--squircle-corner-tr), var(--squircle-corner-br),
+    var(--squircle-corner-bl), var(--squircle-corner-tl);
+  -webkit-mask-size: 100% 100%, var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner),
+    var(--corner) var(--corner);
+  mask-size: 100% 100%, var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner),
+    var(--corner) var(--corner);
+  -webkit-mask-position: 0 0, top right, bottom right, bottom left, top left;
+  mask-position: 0 0, top right, bottom right, bottom left, top left;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over, source-over, source-over, source-over;
+  mask-composite: add;
 }
 
 * {
@@ -203,17 +237,12 @@ button {
 /* Cards — liquid glass: translucent, blurred, soft hue-tinted shadow, inner highlight */
 
 .card {
+  --corner: 16px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-mask-image: var(--squircle-md);
-  mask-image: var(--squircle-md);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   padding: 16px;
 }
 
@@ -224,16 +253,6 @@ button {
     -webkit-backdrop-filter: none;
     border-color: var(--border);
   }
-}
-
-/* Stacked-field forms grow tall with content (many sliders/fields), and a mask
-   stretched that non-uniformly distorts into a broken notch — plain radius here. */
-.log-entry-form,
-.profile-form,
-.custom-exercise-form {
-  -webkit-mask-image: none;
-  mask-image: none;
-  border-radius: 16px;
 }
 
 /* Page hero — sits directly on the app-content's green-to-offwhite band, so text
@@ -272,13 +291,8 @@ button {
    white greeting text keeps full contrast regardless of what's behind it. */
 
 .greeting-card {
+  --corner: 20px;
   background: var(--accent-gradient);
-  -webkit-mask-image: var(--squircle-lg);
-  mask-image: var(--squircle-lg);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   padding: 24px 20px;
   margin-bottom: 24px;
 }
@@ -349,6 +363,7 @@ button {
 }
 
 .auth-form {
+  --corner: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -359,12 +374,6 @@ button {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-mask-image: var(--squircle-md);
-  mask-image: var(--squircle-md);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   padding: 24px;
 }
 
@@ -384,12 +393,10 @@ button {
 
 input,
 select {
+  --corner: 10px;
   font: inherit;
   padding: 10px;
   border: 1px solid var(--border);
-  /* Plain radius, not squircled: form fields are typically much wider than
-     tall, and a mask stretched that non-uniformly distorts badly. */
-  border-radius: 10px;
   background: var(--surface);
   color: var(--text-h);
 }
@@ -434,14 +441,11 @@ select {
 /* Buttons */
 
 .btn {
+  --corner: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
-  /* Plain radius, not squircled: buttons range from small icon-sized to
-     full-width confirm-bar buttons, and a mask stretched non-uniformly
-     across such extreme aspect ratios distorts into a broken notch shape. */
-  border-radius: 12px;
   padding: 12px 18px;
   font-weight: 600;
   text-decoration: none;
@@ -638,6 +642,7 @@ select {
 }
 
 .tile {
+  --corner: 18px;
   position: relative;
   min-height: 64px;
   display: flex;
@@ -645,12 +650,6 @@ select {
   justify-content: flex-start;
   text-align: left;
   padding: 14px 16px;
-  -webkit-mask-image: var(--squircle-md);
-  mask-image: var(--squircle-md);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
@@ -766,6 +765,7 @@ select {
 }
 
 .bottom-nav-item {
+  --corner: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -774,12 +774,6 @@ select {
   color: var(--text-muted);
   font-size: 0.7rem;
   padding: 4px 16px;
-  -webkit-mask-image: var(--squircle-sm);
-  mask-image: var(--squircle-sm);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   transition: color 150ms ease, transform 160ms var(--ease-out);
 }
 
@@ -880,6 +874,7 @@ select {
 }
 
 .dashboard-log-btn {
+  --corner: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -888,12 +883,6 @@ select {
   flex-shrink: 0;
   background: var(--accent-gradient);
   color: #ffffff;
-  -webkit-mask-image: var(--squircle-sm);
-  mask-image: var(--squircle-sm);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   transition: transform 160ms var(--ease-out), filter 160ms ease;
 }
 
@@ -933,17 +922,12 @@ select {
 }
 
 .stat-card {
+  --corner: 14px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-mask-image: var(--squircle-md);
-  mask-image: var(--squircle-md);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   padding: 16px 10px;
   display: flex;
   flex-direction: column;
@@ -1028,6 +1012,7 @@ select {
 }
 
 .log-card-delete {
+  --corner: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1035,12 +1020,6 @@ select {
   height: 34px;
   flex-shrink: 0;
   border: none;
-  -webkit-mask-image: var(--squircle-sm);
-  mask-image: var(--squircle-sm);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   background: transparent;
   color: var(--danger);
   transition: background-color 160ms ease, transform 160ms var(--ease-out);
@@ -1169,12 +1148,18 @@ select {
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  -webkit-mask-image: var(--squircle-modal);
-  mask-image: var(--squircle-modal);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
+  /* Only the top corners are rounded, so this skips the shared 4-corner
+     .squircle base rule and unions just the fill + top-left + top-right tiles. */
+  -webkit-mask-image: linear-gradient(#000, #000), var(--squircle-corner-tr), var(--squircle-corner-tl);
+  mask-image: linear-gradient(#000, #000), var(--squircle-corner-tr), var(--squircle-corner-tl);
+  -webkit-mask-size: 100% 100%, 20px 20px, 20px 20px;
+  mask-size: 100% 100%, 20px 20px, 20px 20px;
+  -webkit-mask-position: 0 0, top right, top left;
+  mask-position: 0 0, top right, top left;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over, source-over;
+  mask-composite: add;
   box-shadow: 0 -8px 40px rgba(31, 47, 22, 0.25);
   transition: transform 300ms var(--ease-out);
   overflow: hidden;
