@@ -5,6 +5,7 @@ import { useUserExercises } from '../hooks/useUserExercises'
 import { useLatestLogs } from '../hooks/useLatestLogs'
 import { getGreeting } from '../lib/greetings'
 import EmptyState from '../components/EmptyState'
+import Spinner from '../components/Spinner'
 
 export default function DashboardPage() {
   const { profile } = useAuth()
@@ -29,7 +30,11 @@ export default function DashboardPage() {
         <p>{subtitle}</p>
       </div>
 
-      {loading && <p>Lade…</p>}
+      {loading && (
+        <div className="page-loading">
+          <Spinner />
+        </div>
+      )}
       {error && <p className="form-error">{error}</p>}
 
       {!loading && !error && userExercises.length === 0 && <EmptyState />}

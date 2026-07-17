@@ -167,7 +167,24 @@ button {
 
 .page-loading {
   padding: 32px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--color-blue-slate);
+  border-radius: 50%;
+  animation: spinner-spin 700ms linear infinite;
+}
+
+@keyframes spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Cards — liquid glass: translucent, blurred, soft hue-tinted shadow, inner highlight */
@@ -341,16 +358,6 @@ select {
 .form-success {
   color: var(--success);
   font-size: 0.9rem;
-}
-
-.link-button {
-  background: none;
-  border: none;
-  color: var(--danger);
-  padding: 0;
-  text-decoration: underline;
-  font-size: 0.85rem;
-  align-self: flex-start;
 }
 
 /* Buttons */
@@ -766,11 +773,11 @@ select {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 14px;
-  padding: 12px 8px;
+  padding: 16px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   text-align: center;
 }
 
@@ -785,8 +792,16 @@ select {
 
 .stat-value {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: var(--text-h);
+}
+
+.stat-value-positive {
+  color: var(--success);
+}
+
+.stat-value-negative {
+  color: var(--danger);
 }
 
 .stat-label {
@@ -839,6 +854,41 @@ select {
   font-size: 0.85rem;
   color: var(--text-muted);
   flex: 1;
+}
+
+.log-card-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--danger);
+  transition: background-color 160ms ease, transform 160ms var(--ease-out);
+}
+
+.log-card-delete:active {
+  transform: scale(0.9);
+  background: var(--danger-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .log-card-delete:hover {
+    background: var(--danger-bg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-card-delete {
+    transition: background-color 160ms ease;
+  }
+
+  .log-card-delete:active {
+    transform: none;
+  }
 }
 
 /* Progress overview tiles — mini sparkline preview per exercise */

@@ -4,6 +4,7 @@ import { useUserExercises } from '../hooks/useUserExercises'
 import { useLatestLogs } from '../hooks/useLatestLogs'
 import Sparkline from '../components/Sparkline'
 import EmptyState from '../components/EmptyState'
+import Spinner from '../components/Spinner'
 
 export default function ProgressOverviewPage() {
   const { userExercises, loading, error } = useUserExercises()
@@ -22,7 +23,11 @@ export default function ProgressOverviewPage() {
         <h1>Fortschritt</h1>
       </div>
 
-      {loading && <p>Lade…</p>}
+      {loading && (
+        <div className="page-loading">
+          <Spinner />
+        </div>
+      )}
       {error && <p className="form-error">{error}</p>}
 
       {!loading && !error && userExercises.length === 0 && <EmptyState />}

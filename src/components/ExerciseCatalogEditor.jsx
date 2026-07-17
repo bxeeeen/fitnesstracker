@@ -3,6 +3,7 @@ import { useExercises } from '../hooks/useExercises'
 import { useUserExercises } from '../hooks/useUserExercises'
 import ExercisePicker from './ExercisePicker'
 import CustomExerciseForm from './CustomExerciseForm'
+import Spinner from './Spinner'
 
 export default function ExerciseCatalogEditor({ onChange }) {
   const { exercises, loading: exercisesLoading, error: exercisesError, refetch: refetchExercises } =
@@ -37,7 +38,11 @@ export default function ExerciseCatalogEditor({ onChange }) {
 
   return (
     <div className="exercise-catalog-editor">
-      {initialLoading && <p>Lade…</p>}
+      {initialLoading && (
+        <div className="page-loading">
+          <Spinner />
+        </div>
+      )}
       {error && <p className="form-error">{error}</p>}
 
       {!error && exercises.length > 0 && (

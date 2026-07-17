@@ -3,20 +3,26 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useUserExercises } from '../hooks/useUserExercises'
 import ExerciseCatalogEditor from '../components/ExerciseCatalogEditor'
+import SliderField from '../components/SliderField'
+import Spinner from '../components/Spinner'
 
 export default function OnboardingPage() {
   const { profile, profileLoading, updateProfile } = useAuth()
   const navigate = useNavigate()
   const [step, setStep] = useState('exercises')
-  const [age, setAge] = useState('')
-  const [heightCm, setHeightCm] = useState('')
-  const [weightKg, setWeightKg] = useState('')
+  const [age, setAge] = useState(25)
+  const [heightCm, setHeightCm] = useState(170)
+  const [weightKg, setWeightKg] = useState(70)
   const [submitting, setSubmitting] = useState(false)
   const { userExercises, refetch: refetchUserExercises } = useUserExercises()
   const hasSelection = userExercises.length > 0
 
   if (profileLoading) {
-    return <div className="page-loading">Lade…</div>
+    return (
+      <div className="page-loading">
+        <Spinner />
+      </div>
+    )
   }
 
   if (profile && profile.onboarding_completed) {
@@ -37,9 +43,9 @@ export default function OnboardingPage() {
   async function handleFinish(e) {
     e.preventDefault()
     await finishOnboarding({
-      age: age ? parseInt(age, 10) : null,
-      height_cm: heightCm ? parseFloat(heightCm) : null,
-      weight_kg: weightKg ? parseFloat(weightKg) : null,
+      age,
+      height_cm: heightCm,
+      weight_kg: weightKg,
     })
   }
 
@@ -63,30 +69,25 @@ export default function OnboardingPage() {
           <h1>Über dich</h1>
           <p className="page-hint">Optional — kannst du auch später im Ich-Bereich nachtragen.</p>
 
-          <label>
-            Alter
-            <input type="number" min="1" max="129" value={age} onChange={(e) => setAge(e.target.value)} />
-          </label>
-          <label>
-            Größe (cm)
-            <input
-              type="number"
-              min="1"
-              step="0.1"
-              value={heightCm}
-              onChange={(e) => setHeightCm(e.target.value)}
-            />
-          </label>
-          <label>
-            Gewicht (kg)
-            <input
-              type="number"
-              min="1"
-              step="0.1"
-              value={weightKg}
-              onChange={(e) => setWeightKg(e.target.value)}
-            />
-          </label>
+          <SliderField label="Alter" unit=" Jahre" value={age} onChange={setAge} min={10} max={100} step={1} />
+          <SliderField
+            label="Größe"
+            unit=" cm"
+            value={heightCm}
+            onChange={setHeightCm}
+            min={100}
+            max={220}
+            step={1}
+          />
+          <SliderField
+            label="Gewicht"
+            unit=" kg"
+            value={weightKg}
+            onChange={setWeightKg}
+            min={30}
+            max={200}
+            step={1}
+          />
         </form>
       )}
 

@@ -6,6 +6,7 @@ import ProgressChart from '../components/ProgressChart'
 import ProgressStats from '../components/ProgressStats'
 import LogHistoryTable from '../components/LogHistoryTable'
 import Modal from '../components/Modal'
+import Spinner from '../components/Spinner'
 
 export default function ExerciseProgressPage() {
   const { exerciseId } = useParams()
@@ -44,7 +45,11 @@ export default function ExerciseProgressPage() {
           Neuen Eintrag loggen
         </Link>
 
-        {loading && <p>Lade…</p>}
+        {loading && (
+          <div className="page-loading">
+            <Spinner />
+          </div>
+        )}
         {error && <p className="form-error">{error}</p>}
 
         {!loading && !error && (

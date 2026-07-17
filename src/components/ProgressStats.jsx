@@ -13,7 +13,9 @@ export default function ProgressStats({ logs }) {
         <span className="stat-label">Maximalgewicht</span>
       </div>
       <div className="stat-card">
-        <span className="stat-value">
+        <span
+          className={`stat-value${change > 0 ? ' stat-value-positive' : change < 0 ? ' stat-value-negative' : ''}`}
+        >
           {change > 0 ? '+' : ''}
           {change.toFixed(1)} kg
         </span>
