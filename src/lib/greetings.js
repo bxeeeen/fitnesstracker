@@ -38,7 +38,7 @@ const BUCKETS = [
     test: (h) => h >= 17 && h < 22,
     subtitles: [
       'Feierabend-Pump gefällig?',
-      'Der Tag ist fast geschafft — noch eine Einheit?',
+      'Der Tag ist fast geschafft, noch eine Einheit?',
       'Zeit, die Gewichte sprechen zu lassen.',
       'Abendtraining macht den Unterschied.',
     ],

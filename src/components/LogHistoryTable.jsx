@@ -1,3 +1,5 @@
+import { formatDateShort } from '../lib/dates'
+
 const TrashIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m3 0-.87 12.14A2 2 0 0 1 15.14 21H8.86a2 2 0 0 1-1.99-1.86L6 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -15,7 +17,7 @@ export default function LogHistoryTable({ logs, onDelete }) {
         <li key={log.id} className="card log-card">
           <div className="log-card-main">
             <span className="log-card-weight">{log.weight_kg} kg</span>
-            <span className="log-card-date">{log.logged_date}</span>
+            <span className="log-card-date">{formatDateShort(log.logged_date)}</span>
           </div>
           <div className="log-card-details">
             {log.reps != null && log.sets != null && (

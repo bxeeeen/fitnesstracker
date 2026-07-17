@@ -5,11 +5,19 @@ function today() {
   return new Date().toISOString().slice(0, 10)
 }
 
-export default function LogEntryForm({ onSubmit, lastLog }) {
+function deriveWeightMax(maxWeightKg) {
+  if (!maxWeightKg || maxWeightKg <= 0) return 300
+  const withHeadroom = Number(maxWeightKg) * 1.2
+  const rounded = Math.ceil(withHeadroom / 5) * 5
+  return Math.max(40, rounded)
+}
+
+export default function LogEntryForm({ onSubmit, lastLog, profile }) {
+  const weightMax = deriveWeightMax(profile?.max_weight_kg)
   const [loggedDate, setLoggedDate] = useState(today())
   const [weightKg, setWeightKg] = useState(lastLog?.weight_kg ?? 20)
-  const [reps, setReps] = useState(lastLog?.reps ?? 8)
-  const [sets, setSets] = useState(lastLog?.sets ?? 3)
+  const [reps, setReps] = useState(lastLog?.reps ?? profile?.default_reps ?? 8)
+  const [sets, setSets] = useState(lastLog?.sets ?? profile?.default_sets ?? 3)
   const [notes, setNotes] = useState('')
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -64,7 +72,7 @@ export default function LogEntryForm({ onSubmit, lastLog }) {
         value={weightKg}
         onChange={setWeightKg}
         min={0}
-        max={300}
+        max={weightMax}
         step={1}
       />
       <SliderField

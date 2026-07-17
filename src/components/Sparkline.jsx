@@ -24,6 +24,7 @@ export default function Sparkline({ logs }) {
     return (
       <div className="sparkline">
         <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none">
+          <polyline points={`${PADDING},${HEIGHT / 2} ${WIDTH - PADDING},${HEIGHT / 2}`} fill="none" />
           <circle cx={WIDTH / 2} cy={HEIGHT / 2} r="4" />
         </svg>
       </div>

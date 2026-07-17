@@ -35,6 +35,17 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
+  /* Squircle masks — stretched over each element via mask-size:100% 100%, so no
+     ResizeObserver or per-element JS is needed. Fully round/pill shapes (spinner,
+     slider thumb, badges, close buttons) are left as plain border-radius. */
+  --squircle-sm: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M22,0H78C87.9,0,100,12.1,100,22V78C100,87.9,87.9,100,78,100H22C12.1,100,0,87.9,0,78V22C0,12.1,12.1,0,22,0Z'/%3E%3C/svg%3E");
+  --squircle-md: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M28,0H72C84.6,0,100,15.4,100,28V72C100,84.6,84.6,100,72,100H28C15.4,100,0,84.6,0,72V28C0,15.4,15.4,0,28,0Z'/%3E%3C/svg%3E");
+  --squircle-lg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M34,0H66C81.3,0,100,18.7,100,34V66C100,81.3,81.3,100,66,100H34C18.7,100,0,81.3,0,66V34C0,18.7,18.7,0,34,0Z'/%3E%3C/svg%3E");
+  /* Modal width can range from ~330px to 640px, so this uses a much smaller
+     corner inset than the other tiers — otherwise the curve overwhelms the
+     sheet and intrudes into the title area. */
+  --squircle-modal: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M8,0H92C95.6,0,100,4.4,100,8V100H0V8C0,4.4,4.4,0,8,0Z'/%3E%3C/svg%3E");
+
   color-scheme: light;
   color: var(--text);
   background: var(--bg);
@@ -195,7 +206,12 @@ button {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: 16px;
+  -webkit-mask-image: var(--squircle-md);
+  mask-image: var(--squircle-md);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   padding: 16px;
 }
 
@@ -206,6 +222,16 @@ button {
     -webkit-backdrop-filter: none;
     border-color: var(--border);
   }
+}
+
+/* Stacked-field forms grow tall with content (many sliders/fields), and a mask
+   stretched that non-uniformly distorts into a broken notch — plain radius here. */
+.log-entry-form,
+.profile-form,
+.custom-exercise-form {
+  -webkit-mask-image: none;
+  mask-image: none;
+  border-radius: 16px;
 }
 
 /* Page hero — sits directly on the app-content's green-to-offwhite band, so text
@@ -245,7 +271,12 @@ button {
 
 .greeting-card {
   background: var(--accent-gradient);
-  border-radius: 20px;
+  -webkit-mask-image: var(--squircle-lg);
+  mask-image: var(--squircle-lg);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   padding: 24px 20px;
   margin-bottom: 24px;
 }
@@ -258,6 +289,37 @@ button {
 .greeting-card p {
   margin: 0;
   color: rgba(255, 255, 255, 0.88);
+}
+
+.home-info-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+
+.info-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  color: var(--text-h);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .info-pill {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: var(--border);
+  }
 }
 
 .page-header-row {
@@ -295,7 +357,12 @@ button {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: 16px;
+  -webkit-mask-image: var(--squircle-md);
+  mask-image: var(--squircle-md);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   padding: 24px;
 }
 
@@ -318,6 +385,8 @@ select {
   font: inherit;
   padding: 10px;
   border: 1px solid var(--border);
+  /* Plain radius, not squircled: form fields are typically much wider than
+     tall, and a mask stretched that non-uniformly distorts badly. */
   border-radius: 10px;
   background: var(--surface);
   color: var(--text-h);
@@ -367,6 +436,9 @@ select {
   align-items: center;
   justify-content: center;
   border: none;
+  /* Plain radius, not squircled: buttons range from small icon-sized to
+     full-width confirm-bar buttons, and a mask stretched non-uniformly
+     across such extreme aspect ratios distorts into a broken notch shape. */
   border-radius: 12px;
   padding: 12px 18px;
   font-weight: 600;
@@ -571,7 +643,12 @@ select {
   justify-content: flex-start;
   text-align: left;
   padding: 14px 16px;
-  border-radius: 18px;
+  -webkit-mask-image: var(--squircle-md);
+  mask-image: var(--squircle-md);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
@@ -634,6 +711,43 @@ select {
   padding: 2px 8px;
 }
 
+/* Wochentag- und Trainingsplan-Kacheln — Ergänzung zum .tile-System */
+
+.weekday-grid {
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.tile-weekday {
+  min-height: 48px;
+  padding: 8px 4px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.tile-grid-compact {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tile-compact {
+  min-height: 44px;
+  padding: 10px 8px;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.training-split-day {
+  margin-bottom: 24px;
+}
+
+.training-split-custom-input {
+  margin-top: 8px;
+  width: 100%;
+}
+
 /* Bottom nav — liquid glass */
 
 .bottom-nav {
@@ -658,7 +772,12 @@ select {
   color: var(--text-muted);
   font-size: 0.7rem;
   padding: 4px 16px;
-  border-radius: 12px;
+  -webkit-mask-image: var(--squircle-sm);
+  mask-image: var(--squircle-sm);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   transition: color 150ms ease, transform 160ms var(--ease-out);
 }
 
@@ -682,17 +801,31 @@ select {
   padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
 }
 
-.onboarding-steps {
-  display: flex;
-  gap: 16px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 16px;
+.onboarding-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin-bottom: 8px;
 }
 
-.onboarding-steps .active {
-  color: var(--text-h);
-  font-weight: 600;
+.onboarding-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent-gradient);
+  transition: width 320ms var(--ease-out);
+}
+
+.onboarding-progress-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-progress-fill {
+    transition: none;
+  }
 }
 
 .onboarding-step {
@@ -744,9 +877,40 @@ select {
   gap: 10px;
 }
 
-.dashboard-item-actions .btn {
-  padding: 8px 14px;
-  font-size: 0.85rem;
+.dashboard-log-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  background: var(--accent-gradient);
+  color: #ffffff;
+  -webkit-mask-image: var(--squircle-sm);
+  mask-image: var(--squircle-sm);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: transform 160ms var(--ease-out), filter 160ms ease;
+}
+
+.dashboard-log-btn:active {
+  transform: scale(0.9);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-log-btn:hover {
+    filter: brightness(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-log-btn,
+  .dashboard-log-btn:active {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Profile */
@@ -772,7 +936,12 @@ select {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: 14px;
+  -webkit-mask-image: var(--squircle-md);
+  mask-image: var(--squircle-md);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   padding: 16px 10px;
   display: flex;
   flex-direction: column;
@@ -864,7 +1033,12 @@ select {
   height: 34px;
   flex-shrink: 0;
   border: none;
-  border-radius: 10px;
+  -webkit-mask-image: var(--squircle-sm);
+  mask-image: var(--squircle-sm);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   background: transparent;
   color: var(--danger);
   transition: background-color 160ms ease, transform 160ms var(--ease-out);
@@ -993,7 +1167,12 @@ select {
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  border-radius: 24px 24px 0 0;
+  -webkit-mask-image: var(--squircle-modal);
+  mask-image: var(--squircle-modal);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   box-shadow: 0 -8px 40px rgba(31, 47, 22, 0.25);
   transition: transform 300ms var(--ease-out);
   overflow: hidden;

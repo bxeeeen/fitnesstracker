@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../context/AuthContext'
 import { useWorkoutLogs } from '../hooks/useWorkoutLogs'
 import LogEntryForm from '../components/LogEntryForm'
 import Modal from '../components/Modal'
@@ -13,6 +14,7 @@ export default function LogEntryPage() {
   const backgroundLocation = location.state?.backgroundLocation
   const [exercise, setExercise] = useState(null)
   const [saved, setSaved] = useState(false)
+  const { profile } = useAuth()
   const { logs, addLog } = useWorkoutLogs(exerciseId)
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function LogEntryPage() {
       ) : (
         <div className="page">
           <h1>{exercise ? `Eintrag: ${exercise.name}` : 'Eintrag loggen'}</h1>
-          <LogEntryForm onSubmit={handleSubmit} lastLog={logs[0]} />
+          <LogEntryForm onSubmit={handleSubmit} lastLog={logs[0]} profile={profile} />
         </div>
       )}
     </Modal>

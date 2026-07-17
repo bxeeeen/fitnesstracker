@@ -7,27 +7,34 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { formatDateShort } from '../lib/dates'
 
 const GRADIENT_FROM = '#5A7684'
 const GRADIENT_TO = '#395B50'
 
-function formatDateShort(isoDate) {
-  const [year, month, day] = isoDate.split('-')
-  return `${day}/${month}/${year.slice(2)}`
+function shiftDateByDays(isoDate, days) {
+  const d = new Date(isoDate)
+  d.setDate(d.getDate() + days)
+  return d.toISOString().slice(0, 10)
 }
 
 export default function ProgressChart({ logs }) {
-  if (logs.length < 2) {
+  if (logs.length === 0) {
     return (
       <p className="page-hint">
-        Sobald du mindestens zwei Einträge hast, siehst du hier deinen Fortschritt als Diagramm.
+        Sobald du mindestens einen Eintrag hast, siehst du hier deinen Fortschritt als Diagramm.
       </p>
     )
   }
 
-  const data = [...logs]
-    .sort((a, b) => a.logged_date.localeCompare(b.logged_date))
-    .map((log) => ({ date: log.logged_date, weight: Number(log.weight_kg) }))
+  const sorted = [...logs].sort((a, b) => a.logged_date.localeCompare(b.logged_date))
+  const data =
+    sorted.length === 1
+      ? [
+          { date: shiftDateByDays(sorted[0].logged_date, -1), weight: Number(sorted[0].weight_kg) },
+          { date: sorted[0].logged_date, weight: Number(sorted[0].weight_kg) },
+        ]
+      : sorted.map((log) => ({ date: log.logged_date, weight: Number(log.weight_kg) }))
 
   return (
     <div className="card progress-chart">
